@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import axiosInstance from '../axiosConfig';
-import LoanForm from '../components/LoanForm';
-import LoanList from '../components/LoanList';
-import { useAuth } from '../context/AuthContext';
+import { useState, useEffect } from "react";
+import axiosInstance from "../axiosConfig";
+import LoanForm from "../components/LoanForm";
+import LoanList from "../components/LoanList";
+import { useAuth } from "../context/AuthContext";
 
 const Loans = () => {
   const { user } = useAuth();
@@ -12,12 +12,12 @@ const Loans = () => {
   useEffect(() => {
     const fetchLoans = async () => {
       try {
-        const response = await axiosInstance.get('/api/loans', {
+        const response = await axiosInstance.get("/api/loans", {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setLoans(response.data);
       } catch (error) {
-        alert('Failed to fetch loans.');
+        alert("Failed to fetch loans.");
       }
     };
 
@@ -32,7 +32,11 @@ const Loans = () => {
         editingLoan={editingLoan}
         setEditingLoan={setEditingLoan}
       />
-      <LoanList loans={loans} setLoans={setLoans} setEditingLoan={setEditingLoan} />
+      <LoanList
+        loans={loans}
+        setLoans={setLoans}
+        setEditingLoan={setEditingLoan}
+      />
     </div>
   );
 };

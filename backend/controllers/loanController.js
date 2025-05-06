@@ -1,49 +1,47 @@
-const Loan = require('../models/Loan');
+const Loan = require("../models/Loan");
+const PrototypeController = require("./PrototypeController");
 
-const getLoans = async (req,res) => {
-    try {
-        const loans = await Loan.find({ userId: req.user.id });
-        res.json(loans);
-    } catch (error) {
-        res.status(500).json({ message: error.message}) 
-    }
-};
+class LoanController extends PrototypeController {
+  static getLoans = async (req, res) => LoanController.getData(req, res, Loan);
 
-const addLoan = async (req,res) => {
+  static addLoan = async (req, res) => {
     const { loanee, book, dueDate } = req.body;
     try {
-        const loan = await Loan.create({ userId: req.user.id, loanee, book, dueDate });
-        res.status(201).json(loan);
+      const loan = await Loan.create({
+        userId: req.user.id,
+        loanee,
+        book,
+        dueDate,
+      });
+      res.status(201).json(loan);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
-};
+  };
 
-const updateLoan = async (req,res) => {
+  static updateLoan = async (req, res) => {
     const { loanee, book, dueDate } = req.body;
     try {
-        const loan = await Loan.findById(req.params.id);
-        if (!loan) return res.status(404).json({ message: 'Loan not found' });
-        loan.book = book || loan.book;
-        loan.loanee = loanee || loan.loanee;
-        loan.dueDate = dueDate || loan.dueDate;
-        const updateLoan = await loan.save();
-        res.json(updateLoan);
+      const loan = await Loan.findById(req.params.id);
+      if (!loan) return res.status(404).json({ message: "Loan not found" });
+      loan.book = book || loan.book;
+      loan.loanee = loanee || loan.loanee;
+      loan.dueDate = dueDate || loan.dueDate;
+      const updateLoan = await loan.save();
+      res.json(updateLoan);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
-};
+  };
 
-const deleteLoan = async (req,res) => {
-    try {
-        const loan = await Loan.findById(req.params.id);
-        if (!loan) return res.status(404).json({ message: 'Loan not found' });
-        await loan.remove();
-        res.json({ message: 'Loan deleted' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+  static deleteLoan = async (req, res) =>
+    LoanController.deleteData(req, res, Loan);
+}
 
+Object.assign(LoanController, PrototypeController);
+
+const getLoans = LoanController.getLoans;
+const addLoan = LoanController.addLoan;
+const updateLoan = LoanController.updateLoan;
+const deleteLoan = LoanController.deleteLoan;
 module.exports = { getLoans, addLoan, updateLoan, deleteLoan };
-
