@@ -28,7 +28,11 @@ class BookController extends PrototypeController {
 
       res.status(201).json(book);
     } catch (error) {
-      logger.error('Error adding book', { userId: req.user?.id, error: error.message, body: req.body });
+      logger.error('Error adding book', { 
+        userId: req.user?.id, 
+        error: error.message, 
+        body: req.body 
+      });
       res.status(500).json({ message: error.message });
     }
   };

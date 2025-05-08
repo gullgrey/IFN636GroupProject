@@ -14,8 +14,17 @@ class LoanController extends PrototypeController {
         book,
         dueDate,
       });
+      //Add logger
+      logger.info("Admin added loan", {
+        loanId: loan._id,
+        userId: req.user?.id,
+        loanee: loan.loanee,
+        book: loan.book,
+      });
+
       res.status(201).json(loan);
     } catch (error) {
+      logger.error("Error adding loan", { userId: req.user?.id, error: error.message });
       res.status(500).json({ message: error.message });
     }
   };
@@ -24,13 +33,19 @@ class LoanController extends PrototypeController {
     const { loanee, book, dueDate } = req.body;
     try {
       const loan = await Loan.findById(req.params.id);
-      if (!loan) return res.status(404).json({ message: "Loan not found" });
+      if (!loan) {
+        logger.warn(`Loan with ID ${req.params.id} not found`);
+        return res.status(404).json({ message: "Loan not found" });
+      }
       loan.book = book || loan.book;
       loan.loanee = loanee || loan.loanee;
       loan.dueDate = dueDate || loan.dueDate;
       const updateLoan = await loan.save();
+
+      logger.info("Admin updated loan", { loanId: updateLoan._id, userId: req.user?.id });
       res.json(updateLoan);
     } catch (error) {
+      logger.error("Error updating loan", { userId: req.user?.id, error: error.message });
       res.status(500).json({ message: error.message });
     }
   };
