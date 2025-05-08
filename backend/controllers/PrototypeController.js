@@ -1,8 +1,8 @@
 class PrototypeController {
   static getData = async (req, res, model) => {
     try {
-      const books = await model.find({ userId: req.user.id });
-      res.json(books);
+      const data = await model.find({ userId: req.user.id });
+      res.json(data);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -10,10 +10,10 @@ class PrototypeController {
 
   static deleteData = async (req, res, model) => {
     try {
-      const book = await model.findById(req.params.id);
-      if (!book) return res.status(404).json({ message: "Book not found" });
-      await book.remove();
-      res.json({ message: "Book deleted" });
+      const data = await model.findById(req.params.id);
+      if (!data) return res.status(404).json({ message: "Data not found" });
+      await data.remove();
+      res.json({ message: "Data deleted" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
