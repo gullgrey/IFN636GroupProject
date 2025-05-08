@@ -1,5 +1,6 @@
 const Member = require("../models/Member");
 const PrototypeController = require("./PrototypeController");
+const logger = require('../utils/logger');
 
 class MemeberController extends PrototypeController {
   static getMembers = async (req, res) =>
@@ -14,8 +15,16 @@ class MemeberController extends PrototypeController {
         gender,
         dateOfBirth,
       });
+      //Add logger
+      logger.info("Admin added member", {
+        memberId: member._id,
+        userId: req.user?.id,
+        name: member.name,
+        gender: member.gender,
+      });
       res.status(201).json(member);
     } catch (error) {
+      logger.error("Error adding member", { userId: req.user?.id, error: error.message });
       res.status(500).json({ message: error.message });
     }
   };
@@ -24,13 +33,18 @@ class MemeberController extends PrototypeController {
     const { name, dateOfBirth, gender } = req.body;
     try {
       const member = await Member.findById(req.params.id);
-      if (!member) return res.status(404).json({ message: "Member not found" });
+      if (!member) {
+        logger.warn(`Member with ID ${req.params.id} not found`);
+        return res.status(404).json({ message: "Member not found" });
+      }
       member.name = name || member.name;
       member.gender = gender || member.gender;
       member.dateOfBirth = dateOfBirth || member.dateOfBirth;
       const updatedMember = await member.save();
+      logger.info("Admin updated member", { memberId: updatedMember._id, userId: req.user?.id });
       res.json(updatedMember);
     } catch (error) {
+      logger.error("Error updating member", { userId: req.user?.id, error: error.message });
       res.status(500).json({ message: error.message });
     }
   };
