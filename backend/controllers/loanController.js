@@ -1,5 +1,6 @@
 const Loan = require("../models/Loan");
 const PrototypeController = require("./PrototypeController");
+const logger = require('../utils/logger');
 
 class LoanController extends PrototypeController {
   static getLoans = async (req, res) => LoanController.getData(req, res, Loan);

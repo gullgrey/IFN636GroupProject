@@ -1,3 +1,5 @@
+const logger = require('../utils/logger');
+
 class PrototypeController {
   static getData = async (req, res, model) => {
     try {
