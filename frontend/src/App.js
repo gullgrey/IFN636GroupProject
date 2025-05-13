@@ -6,6 +6,8 @@ import Profile from './pages/Profile';
 import Members from './pages/Members';
 import Books from './pages/Books'
 import Loans from './pages/Loans'
+import ProtectedRoute from './proxy/ProtectedRoute';
+import Unauthorized from './pages/Unauthorized';
 
 function App() {
   return (
@@ -14,10 +16,11 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/members" element={<Members />} />
-        <Route path="/books" element={<Books />} />
-        <Route path="/loans" element={<Loans />} />
+        <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute> } />
+        <Route path="/members" element={<ProtectedRoute roles ={['admin']}><Members /></ProtectedRoute>} />
+        <Route path="/books" element={<ProtectedRoute><Books /></ProtectedRoute>} />
+        <Route path="/loans" element={<ProtectedRoute><Loans /></ProtectedRoute>} />
+        <Route path='/unauthorized' element={<Unauthorized />} />
       </Routes>
     </Router>
   );

@@ -9,6 +9,7 @@ const Profile = () => {
     email: '',
     university: '',
     address: '',
+    role: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -25,6 +26,7 @@ const Profile = () => {
           email: response.data.email,
           university: response.data.university || '',
           address: response.data.address || '',
+          role: response.data.role,
         });
       } catch (error) {
         alert('Failed to fetch profile. Please try again.');
@@ -87,6 +89,16 @@ const Profile = () => {
           onChange={(e) => setFormData({ ...formData, address: e.target.value })}
           className="w-full mb-4 p-2 border rounded"
         />
+        <select
+          type="role"
+          placeholder="Role"
+          value={formData.role}
+          onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+          className="w-full mb-4 p-2 border rounded"
+        >
+          <option value ='user'>User</option>
+          <option value ='admin'>Admin</option>
+        </select>
         <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
           {loading ? 'Updating...' : 'Update Profile'}
         </button>
