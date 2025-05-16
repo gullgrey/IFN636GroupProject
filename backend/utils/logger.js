@@ -1,15 +1,15 @@
 //Define Logger class
 class Logger {
     static instance = null;
+    recentLogs = [];
+    maxRecentLogs = 50;
+
     constructor(){
         if(Logger.instance){
             return Logger.instance;
         }
-        //Initialize the logger
         this.logLevel = process.env.LOG_LEVEL ? process.env.LOG_LEVEL.toUpperCase() : 'INFO';
-        console.log(`Logger: Initialized with log level: ${this.logLevel}`);
-
-        //Save the instance
+        //console.log(`Logger: Initialized with log level: ${this.logLevel}`);
         Logger.instance = this;
     }
 
@@ -24,20 +24,21 @@ class Logger {
             const timestamp = new Date().toISOString();
             let logMessage = `[${timestamp}] [${upperLevel}] ${message}`;
             if(data !== null && data !== undefined){
-                try{
+                try {
                     logMessage += ` Data: ${JSON.stringify(data, null, 2)}`;
-                }catch(err){
+                } catch(err){
                     logMessage += ` Data: (Could not stringify data: ${err.message})`;
                 }
             }
 
-            if(upperLevel === 'ERROR'){
-                console.error(logMessage);
-            }else if(upperLevel === 'WARN'){
-                console.warn(logMessage);
-            }else{
-                console.log(logMessage);
+            if (this.recentLogs.length >= this.maxRecentLogs){
+                this.recentLogs.shift();
             }
+            this.recentLogs.push(logMessage);
+
+            if(upperLevel === 'ERROR') { console.error(logMessage); }
+            else if(upperLevel === 'WARN') { console.warn(logMessage); }
+            else{ console.log(logMessage); }
         }
     }
 
@@ -49,6 +50,14 @@ class Logger {
     }
     error(message, data){
         this.log('ERROR', message, data);
+    }
+
+    getLoggerInfo() {
+        return {
+            logLevel: this.logLevel,
+            recentLogs: [...this.recentLogs],
+            logCount: this.recentLogs.length
+        }
     }
 
 }
