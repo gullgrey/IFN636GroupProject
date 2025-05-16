@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import LogDisplay from '../components/LogDisplay';
 import axiosInstance from '../axiosConfig';
 
 const Profile = () => {
@@ -12,6 +13,11 @@ const Profile = () => {
     role: '',
   });
   const [loading, setLoading] = useState(false);
+
+  const [activityLog, setActivityLog] = useState(null);
+  const [loadingLog, setLoadingLog] = useState(false);
+  const [showLog, setShowLog] = useState(false);
+  const [logError, setLogError] = useState(null);
 
   useEffect(() => {
     // Fetch profile data from the backend
@@ -53,12 +59,34 @@ const Profile = () => {
     }
   };
 
+  //Fetch and toggle logDisplay
+  const handleToggleLogDisplay = async () => {
+    if (showLog) {
+      setShowLog(false);
+      return;
+    }
+    setShowLog(true);
+    setLoadingLog(true);
+    setLogError(null);
+
+    try {
+      const response = await axiosInstance.get('/api/logs');
+      setActivityLog(response.data);
+    } catch(error) {
+      console.error('Failed to fetch activity log:', error);
+      setLogError(error.response?.data?.message || 'Could not load activity log.');
+      setActivityLog(null);
+    } finally {
+      setLoadingLog(false);
+    }
+  };
+
   if (loading) {
     return <div className="text-center mt-20">Loading...</div>;
   }
 
   return (
-    <div className="max-w-md mx-auto mt-20">
+    <div className="max-w-md mx-auto mt-10 mb-20">
       <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded">
         <h1 className="text-2xl font-bold mb-4 text-center">Your Profile</h1>
         <input
@@ -103,6 +131,26 @@ const Profile = () => {
           {loading ? 'Updating...' : 'Update Profile'}
         </button>
       </form>
+
+      <div className="mt-8">
+        <button
+          onClick={handleToggleLogDisplay}
+          className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold p-2 rounded mb-4"
+          disabled={loadingLog}
+        >
+          {loadingLog ? 'Loading Log...' : (showLog ? 'Hide Activity History' : 'Check Activity History')}
+        </button>
+
+        {showLog && (
+          <LogDisplay
+            logs={activityLog?.recentLogs}
+            logLevel={activityLog?.logLevel}
+            logCount={activityLog?.logCount}
+            isLoading={loadingLog}
+            error={logError}
+          />
+        )}
+      </div>
     </div>
   );
 };
