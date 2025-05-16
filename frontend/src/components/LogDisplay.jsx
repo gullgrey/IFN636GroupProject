@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LogDisplay = ({ logs, logLevel, isLoading, error }) => {
+const LogDisplay = ({ logs, logLevel, logCount, isLoading, error }) => {
     if (isLoading) {
         return <p className="tect-center text-gray-500 mt-4">Loading activity log...</p>;
     }
