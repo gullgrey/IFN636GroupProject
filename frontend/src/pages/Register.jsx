@@ -1,19 +1,24 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../axiosConfig';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../axiosConfig";
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: '' });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "user",
+  });
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.post('/api/auth/register', formData);
-      alert('Registration successful. Please log in.');
-      navigate('/login');
+      await axiosInstance.post("/api/auth/register", formData);
+      alert("Registration successful. Please log in.");
+      navigate("/login");
     } catch (error) {
-      alert('Registration failed. Please try again.');
+      alert("Registration failed. Please try again.");
     }
   };
 
@@ -39,7 +44,9 @@ const Register = () => {
           type="password"
           placeholder="Password"
           value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, password: e.target.value })
+          }
           className="w-full mb-4 p-2 border rounded"
         />
         <select
@@ -49,10 +56,13 @@ const Register = () => {
           onChange={(e) => setFormData({ ...formData, role: e.target.value })}
           className="w-full mb-4 p-2 border rounded"
         >
-          <option value ='user'>User</option>
-          <option value ='admin'>Admin</option>
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
         </select>
-        <button type="submit" className="w-full bg-green-600 text-white p-2 rounded">
+        <button
+          type="submit"
+          className="w-full bg-green-600 text-white p-2 rounded"
+        >
           Register
         </button>
       </form>

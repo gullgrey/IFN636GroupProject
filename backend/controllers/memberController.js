@@ -1,10 +1,11 @@
 const Member = require("../models/Member");
 const PrototypeController = require("./PrototypeController");
-const logger = require('../utils/logger');
+const logger = require("../utils/logger");
 
-class MemeberController extends PrototypeController {
-  static getMembers = async (req, res) =>
-    MemeberController.getData(req, res, Member);
+class MemberController extends PrototypeController {
+  static getMembers = async (req, res, requireID = false) => {
+    MemberController.getData(req, res, Member, (requireID = requireID));
+  };
 
   static addMember = async (req, res) => {
     const { name, dateOfBirth, gender } = req.body;
@@ -24,7 +25,10 @@ class MemeberController extends PrototypeController {
       });
       res.status(201).json(member);
     } catch (error) {
-      logger.error("Error adding member", { userId: req.user?.id, error: error.message });
+      logger.error("Error adding member", {
+        userId: req.user?.id,
+        error: error.message,
+      });
       res.status(500).json({ message: error.message });
     }
   };
@@ -41,20 +45,28 @@ class MemeberController extends PrototypeController {
       member.gender = gender || member.gender;
       member.dateOfBirth = dateOfBirth || member.dateOfBirth;
       const updatedMember = await member.save();
-      logger.info("Admin updated member", { memberId: updatedMember._id, userId: req.user?.id });
+      logger.info("Admin updated member", {
+        memberId: updatedMember._id,
+        userId: req.user?.id,
+      });
       res.json(updatedMember);
     } catch (error) {
-      logger.error("Error updating member", { userId: req.user?.id, error: error.message });
+      logger.error("Error updating member", {
+        userId: req.user?.id,
+        error: error.message,
+      });
       res.status(500).json({ message: error.message });
     }
   };
 
   static deleteMember = async (req, res) =>
-    MemeberController.deleteData(req, res, Member);
+    MemberController.deleteData(req, res, Member);
 }
 
-const getMembers = MemeberController.getMembers;
-const addMember = MemeberController.addMember;
-const updateMember = MemeberController.updateMember;
-const deleteMember = MemeberController.deleteMember;
-module.exports = { getMembers, addMember, updateMember, deleteMember };
+// const getMembers = MemberController.getMembers;
+// const addMember = MemberController.addMember;
+// const updateMember = MemberController.updateMember;
+// const deleteMember = MemberController.deleteMember;
+// module.exports = { getMembers, addMember, updateMember, deleteMember };
+
+module.exports = MemberController;
