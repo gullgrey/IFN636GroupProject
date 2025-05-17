@@ -90,7 +90,11 @@ class BookController extends PrototypeController {
   static deleteBook = async (req, res) => {
     const book = await Book.findById(req.params.id);
     BookController.deleteData(req, res, Book);
-    notifier.notifySubscribers("The book " + book.title + " has been removed.");
+    try {
+      notifier.notifySubscribers(
+        "The book " + book.title + " has been removed."
+      );
+    } catch (error) {}
   };
 }
 
