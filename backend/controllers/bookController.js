@@ -19,19 +19,19 @@ class BookController extends PrototypeController {
       });
 
       //log admin action: add book
-      logger.info('Admin added book', {
+      logger.info("Admin added book", {
         bookId: book._id,
         userId: req.user?.id,
         title: book.title,
-        isbn: book.isbn
+        isbn: book.isbn,
       });
 
       res.status(201).json(book);
     } catch (error) {
-      logger.error('Error adding book', { 
-        userId: req.user?.id, 
-        error: error.message, 
-        body: req.body 
+      logger.error("Error adding book", {
+        userId: req.user?.id,
+        error: error.message,
+        body: req.body,
       });
       res.status(500).json({ message: error.message });
     }
@@ -54,14 +54,17 @@ class BookController extends PrototypeController {
       const updateBook = await book.save();
 
       //log admin update a book
-      logger.info('Admin updated book', {
+      logger.info("Admin updated book", {
         bookId: updateBook._id,
         userId: req.user?.id,
       });
 
       res.json(updateBook);
     } catch (error) {
-      logger.error('Error updating book', { userId: req.user?.id, error: error.message });
+      logger.error("Error updating book", {
+        userId: req.user?.id,
+        error: error.message,
+      });
       res.status(500).json({ message: error.message });
     }
   };
@@ -72,8 +75,9 @@ class BookController extends PrototypeController {
 
 Object.assign(BookController, PrototypeController);
 
-const getBooks = BookController.getBooks;
-const addBook = BookController.addBook;
-const updateBook = BookController.updateBook;
-const deleteBook = BookController.deleteBook;
-module.exports = { getBooks, addBook, updateBook, deleteBook };
+// const getBooks = BookController.getBooks;
+// const addBook = BookController.addBook;
+// const updateBook = BookController.updateBook;
+// const deleteBook = BookController.deleteBook;
+// module.exports = { getBooks, addBook, updateBook, deleteBook };
+module.exports = BookController;

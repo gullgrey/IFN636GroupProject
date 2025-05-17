@@ -11,7 +11,11 @@ const LoanList = ({ loans, setLoans, setEditingLoan }) => {
       });
       setLoans(loans.filter((loan) => loan._id !== loanId));
     } catch (error) {
-      alert("Failed to delete loan.");
+      if (error.status === 401) {
+        alert("Unauthorized: You do not have permission to delete this loan.");
+      } else {
+        alert("Failed to delete loan.");
+      }
     }
   };
 
