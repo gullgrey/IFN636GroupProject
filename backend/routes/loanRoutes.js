@@ -17,17 +17,9 @@ const addLoan = LoanController.addLoan;
 const updateLoan = LoanController.updateLoan;
 const deleteLoan = LoanController.deleteLoan;
 
-// const deleteLoan = async (req, res) => {
-//   if (req.user.role === "admin") {
-//     LoanController.deleteLoan(req, res);
-//   } else {
-//     console.log("here!");
-//     ProxyController.deleteData(req, res);
-//   }
-// };
-
 router.route("/").get(protect, getLoans).post(protect, addLoan);
 router.route("/:id").put(protect, updateLoan).delete(protect, deleteLoan);
+
 // 🔔 Route to manually trigger due-soon check & notify users
 router.route("/check/notifications").get(protect, async (req, res) => {
   try {

@@ -1,6 +1,7 @@
 const Book = require("../models/Book");
 const PrototypeController = require("./PrototypeController");
 const logger = require("../utils/logger");
+const notifier = require("../observers/Notifier");
 
 class BookController extends PrototypeController {
   static getBooks = async (req, res) => BookController.getData(req, res, Book);
@@ -25,6 +26,14 @@ class BookController extends PrototypeController {
         title: book.title,
         isbn: book.isbn,
       });
+
+      notifier.notifySubscribers(
+        "A new book has been added: " +
+          book.title +
+          ", with " +
+          book.copies +
+          " copies available!"
+      );
 
       res.status(201).json(book);
     } catch (error) {
@@ -59,6 +68,14 @@ class BookController extends PrototypeController {
         userId: req.user?.id,
       });
 
+      notifier.notifySubscribers(
+        "The book " +
+          book.title +
+          " has been updated and has " +
+          book.copies +
+          " copies available!"
+      );
+
       res.json(updateBook);
     } catch (error) {
       logger.error("Error updating book", {
@@ -69,8 +86,11 @@ class BookController extends PrototypeController {
     }
   };
 
-  static deleteBook = async (req, res) =>
+  static deleteBook = async (req, res) => {
+    const book = await Book.findById(req.params.id);
     BookController.deleteData(req, res, Book);
+    notifier.notifySubscribers("The book " + book.title + " has been removed.");
+  };
 }
 
 Object.assign(BookController, PrototypeController);
