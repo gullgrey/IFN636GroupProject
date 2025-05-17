@@ -27,6 +27,7 @@ class BookController extends PrototypeController {
         isbn: book.isbn,
       });
 
+      //notification for adding a book.
       notifier.notifySubscribers(
         "A new book has been added: " +
           book.title +
@@ -95,9 +96,4 @@ class BookController extends PrototypeController {
 
 Object.assign(BookController, PrototypeController);
 
-// const getBooks = BookController.getBooks;
-// const addBook = BookController.addBook;
-// const updateBook = BookController.updateBook;
-// const deleteBook = BookController.deleteBook;
-// module.exports = { getBooks, addBook, updateBook, deleteBook };
 module.exports = BookController;

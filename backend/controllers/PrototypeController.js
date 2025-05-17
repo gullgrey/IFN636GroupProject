@@ -9,7 +9,6 @@ class PrototypeController {
       } else {
         data = await model.find();
       }
-      // const data = await model.find();
 
       logger.info(`Fetched ${data.length} records from ${model.modelName}`);
       res.json(data);

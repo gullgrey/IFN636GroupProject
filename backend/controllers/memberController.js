@@ -63,10 +63,4 @@ class MemberController extends PrototypeController {
     MemberController.deleteData(req, res, Member);
 }
 
-// const getMembers = MemberController.getMembers;
-// const addMember = MemberController.addMember;
-// const updateMember = MemberController.updateMember;
-// const deleteMember = MemberController.deleteMember;
-// module.exports = { getMembers, addMember, updateMember, deleteMember };
-
 module.exports = MemberController;

@@ -11,8 +11,6 @@ class Notifier {
       }
     }
     this.subscribers.push(subscriber);
-    // console.log(subscriber);
-    // console.log(this.subscribers);
   }
 
   removeSubscriber(subscriber) {
