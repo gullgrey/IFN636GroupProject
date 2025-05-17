@@ -1,8 +1,8 @@
 const Loan = require("../models/Loan");
 const PrototypeController = require("./PrototypeController");
 const logger = require("../utils/logger");
-// const Notifier = require('../observers/Notifier');
-// const Subject = require('../observers/Subject');
+const Notifier = require("../observers/Notifier");
+const Subject = require("../observers/Subscriber");
 
 class LoanController extends PrototypeController {
   static getLoans = async (req, res, requireID = false) => {

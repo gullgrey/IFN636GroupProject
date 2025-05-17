@@ -49,16 +49,4 @@ class ProxyController {
   };
 }
 
-// const getLoans = async (req, res) => {
-//   if (req.user.role === "admin") {
-//     LoanController.getLoans(req, res);
-//   } else {
-//     ProxyController.getLoans(req, res);
-//   }
-// };
-
-// // const getLoans = LoanController.getLoans;
-// const addLoan = LoanController.addLoan;
-// const updateLoan = LoanController.updateLoan;
-// const deleteLoan = LoanController.deleteLoan;
 module.exports = ProxyController;
