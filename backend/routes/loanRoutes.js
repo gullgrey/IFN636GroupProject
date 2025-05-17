@@ -1,5 +1,4 @@
 const express = require("express");
-// const { getLoans, addLoan, updateLoan, deleteLoan } = require('../controllers/loanController');
 const ProxyController = require("../controllers/ProxyController");
 const LoanController = require("../controllers/loanController");
 const { protect } = require("../middleware/authMiddleware");

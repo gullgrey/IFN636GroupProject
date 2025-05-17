@@ -1,8 +1,6 @@
 const Loan = require("../models/Loan");
 const PrototypeController = require("./PrototypeController");
 const logger = require("../utils/logger");
-const Notifier = require("../observers/Notifier");
-const Subject = require("../observers/Subscriber");
 
 class LoanController extends PrototypeController {
   static getLoans = async (req, res, requireID = false) => {
@@ -65,32 +63,8 @@ class LoanController extends PrototypeController {
 
   static deleteLoan = async (req, res) =>
     LoanController.deleteData(req, res, Loan);
-
-  // static checkDueSoonLoans = async () => {
-  //   const now = new Date();
-  //   const twoDaysFromNow = new Date(now.getTime() + 48 * 60 * 60 * 1000);
-
-  //   const loans = await Loan.find({
-  //     dueDate: { $lte: twoDaysFromNow },
-  //   }).populate("userId");
-
-  //   const notifier = new Notifier();
-  //   Subject.addObserver(notifier);
-
-  //   for (const loan of loans) {
-  //     if (loan?.userId) {
-  //       Subject.notifyObservers(loan.userId, loan);
-  //     }
-  //   }
-  // };
 }
 
 Object.assign(LoanController, PrototypeController);
-
-// const getLoans = LoanController.getLoans;
-// const addLoan = LoanController.addLoan;
-// const updateLoan = LoanController.updateLoan;
-// const deleteLoan = LoanController.deleteLoan;
-// module.exports = { getLoans, addLoan, updateLoan, deleteLoan };
 
 module.exports = LoanController;

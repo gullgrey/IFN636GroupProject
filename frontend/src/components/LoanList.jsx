@@ -29,12 +29,6 @@ const LoanList = ({ loans, setLoans, setEditingLoan }) => {
             Due Date: {new Date(loan.dueDate).toLocaleDateString()}
           </p>
           <div className="mt-2">
-            {/* <button
-                            onClick={() => setEditingLoan(loan)}
-                            className="mr-2 bg-yellow-500 text-white px-4 py-2 rounded"
-                        >
-                            Renew
-                        </button> */}
             <button
               onClick={() => handleDelete(loan._id)}
               className="bg-red-500 text-white px-4 py-2 rounded"

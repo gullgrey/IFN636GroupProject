@@ -6,7 +6,6 @@ const router = express.Router();
 
 const getNotifications = async (req, res) => {
   try {
-    // console.log(req.user);
     const subscriber = notifier.getSubscriber(req.user.id);
     const messages = subscriber.messages;
     res.json(messages);
